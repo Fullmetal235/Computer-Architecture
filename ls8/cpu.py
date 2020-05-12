@@ -38,9 +38,10 @@ class CPU:
 
 		with open(sys.argv[1]) as file:
 			for instruction in file:
-				cleaned_instruction = instruction.split(" ")[0]
-				if cleaned_instruction != "#":
-					self.ram[address] = int(cleaned_instruction, 2) # keeping it in binary
+				cleaned_instruction = instruction.split("#")
+				cleaned_valued = cleaned_instruction[0].strip()
+				if cleaned_valued != "":
+					self.ram[address] = int(cleaned_valued, 2) # keeping it in binary
 					address += 1
 
 	def alu(self, op, reg_a, reg_b):
@@ -102,6 +103,9 @@ class CPU:
 
 				print(f'Print: {value}')
 				self.pc += 2
+            elif instruction == MUL:
+				self.alu("MUL", operand_a, operand_b)
+				self.pc += 3
 
 			elif instruction == PUSH:
 				# stack pointer points at f4 if stack empty, grows downward (the "top" of the stack is bottom-most value)
